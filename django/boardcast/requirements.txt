@@ -9,5 +9,8 @@ django-cors-headers==4.4.0
 celery==5.4.0
 redis==5.0.8
 
+# Postgres (Neon)
+psycopg[binary]==3.2.3
+
 # For uploads / validation
 python-magic==0.4.27; platform_system != "Windows"
