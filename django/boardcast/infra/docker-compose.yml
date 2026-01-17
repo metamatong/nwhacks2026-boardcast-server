@@ -1,0 +1,8 @@
+services:
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  # coturn + SFU are intentionally not started automatically here
+  # because their port needs vary; add later as needed.
