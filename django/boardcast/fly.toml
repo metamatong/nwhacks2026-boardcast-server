@@ -1,0 +1,35 @@
+app = "boardcast-server"
+
+[build]
+  dockerfile = "Dockerfile.fly"
+
+[processes]
+  web = "daphne -b 0.0.0.0 -p ${PORT:-8080} config.asgi:application"
+  worker = "celery -A config worker -l info"
+
+[deploy]
+  release_command = "python manage.py migrate"
+
+[env]
+  DJANGO_DEBUG = "0"
+  PORT = "8080"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.http_checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "10s"
+    method = "get"
+    path = "/api/realtime/health/"
+    protocol = "http"
