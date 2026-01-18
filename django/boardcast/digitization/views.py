@@ -1,6 +1,3 @@
-import numpy as np
-import cv2
-
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -64,6 +61,9 @@ class DigitizationJobCreateView(APIView):
 
 class DigitizationFrameUploadView(APIView):
     def post(self, request, job_id):
+        import cv2
+        import numpy as np
+
         job = get_object_or_404(DigitizationJob, id=job_id)
         if job.status not in {STATUS_CREATED, STATUS_UPLOADING, STATUS_FAILED}:
             return Response(
