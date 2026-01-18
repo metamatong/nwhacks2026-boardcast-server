@@ -13,6 +13,7 @@ app = "boardcast-server"
 [env]
   DJANGO_DEBUG = "0"
   PORT = "8080"
+  CORS_ALLOWED_ORIGINS = "https://www.boardcast.tech"
 
 [[services]]
   internal_port = 8080
