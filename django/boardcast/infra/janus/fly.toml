@@ -1,0 +1,53 @@
+# fly.toml app configuration file generated for boardcast-janus on 2026-01-17T17:22:20-08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'boardcast-janus'
+primary_region = 'lax'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[env]
+  JANUS_PUBLIC_IP = ''
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 8088
+  processes = ['app']
+
+  [[services.ports]]
+    port = 80
+    handlers = ['http']
+
+  [[services.ports]]
+    port = 443
+    handlers = ['tls', 'http']
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 8188
+  processes = ['app']
+
+  [[services.ports]]
+    port = 8188
+    handlers = ['http']
+
+  [[services.ports]]
+    port = 8443
+    handlers = ['tls', 'http']
+
+[[services]]
+  protocol = 'udp'
+  internal_port = 10000
+  processes = ['app']
+
+  [[services.ports]]
+    port = 10000
+    end_port = 10200
+
+[[vm]]
+  memory = '1gb'
+  cpus = 4
+  memory_mb = 1024

@@ -105,5 +105,6 @@ JANUS_URL = env("JANUS_URL", default="")
 JANUS_API_SECRET = env("JANUS_API_SECRET", default="")
 JANUS_ADMIN_KEY = env("JANUS_ADMIN_KEY", default="")
 JANUS_TIMEOUT_SECONDS = env.int("JANUS_TIMEOUT_SECONDS", default=5)
+JANUS_PUBLIC_URL = env("JANUS_PUBLIC_URL", default=JANUS_URL)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

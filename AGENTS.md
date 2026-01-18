@@ -19,6 +19,7 @@ ignored.
 - `django/boardcast/media_ingest/`: Audio chunk upload.
 - `django/boardcast/intelligence/`: Celery task stubs (transcript/highlight).
 - `django/boardcast/infra/`: Redis docker compose + TURN config placeholder.
+- `django/boardcast/infra/janus/`: Fly deployable Janus (SFU) setup.
 
 ## API Endpoints
 - `POST /api/rooms/create/`: create a room, returns `id` and `join_code`.

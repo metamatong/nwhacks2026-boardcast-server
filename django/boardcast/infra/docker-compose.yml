@@ -5,11 +5,15 @@ services:
       - "6379:6379"
 
   janus:
-    image: meetecho/janus-gateway:latest
+    build:
+      context: ..
+      dockerfile: infra/janus/Dockerfile
     ports:
       - "8088:8088" # HTTP Janus API
       - "8188:8188" # WebSocket Janus API
       - "10000-10200:10000-10200/udp" # RTP media range
+    environment:
+      - JANUS_PUBLIC_IP=
 
   # coturn is intentionally not started automatically here
   # because its port needs vary; add later as needed.

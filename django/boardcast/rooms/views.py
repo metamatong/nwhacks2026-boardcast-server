@@ -34,7 +34,7 @@ class RoomCreateView(APIView):
             janus_room_id=janus_room_id,
         )
         data = RoomCreateSerializer(room).data
-        data["janus_url"] = settings.JANUS_URL
+        data["janus_url"] = settings.JANUS_PUBLIC_URL
         return Response(data, status=status.HTTP_201_CREATED)
 
 
@@ -65,7 +65,7 @@ class RoomJoinView(APIView):
                 "room_id": str(room.id),
                 "title": room.title,
                 "janus_room_id": room.janus_room_id,
-                "janus_url": settings.JANUS_URL,
+                "janus_url": settings.JANUS_PUBLIC_URL,
             }
         )
 
