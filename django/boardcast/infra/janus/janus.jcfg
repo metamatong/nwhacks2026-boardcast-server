@@ -1,0 +1,13 @@
+general: {
+  log_to_stdout = true
+  log_timestamp = true
+  log_level = 4
+}
+
+media: {
+  rtp_port_range = "10000-10200"
+}
+
+nat: {
+  nat_1_1_mapping = "__JANUS_PUBLIC_IP__"
+}
