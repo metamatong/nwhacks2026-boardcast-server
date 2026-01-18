@@ -31,7 +31,8 @@ def _get_redis_client() -> redis.Redis:
 
 
 def transcribe_audio_chunk(chunk) -> str:
-    if not settings.ELEVENLABS_API_KEY:
+    api_key = settings.ELEVENLABS_API_KEY.strip()
+    if not api_key:
         raise RuntimeError("ELEVENLABS_API_KEY is not set")
 
     with chunk.file.open("rb") as handle:
@@ -56,11 +57,20 @@ def transcribe_audio_chunk(chunk) -> str:
 
         resp = requests.post(
             settings.ELEVENLABS_STT_URL,
-            headers={"xi-api-key": settings.ELEVENLABS_API_KEY},
+            headers={"xi-api-key": api_key},
             data=data,
             files=files,
             timeout=30,
         )
+        if resp.status_code >= 400:
+            trace_id = resp.headers.get("x-trace-id") or resp.headers.get("x-request-id") or ""
+            logger.error(
+                "ElevenLabs STT error status=%s trace=%s key_len=%s body=%s",
+                resp.status_code,
+                trace_id,
+                len(api_key),
+                resp.text,
+            )
         resp.raise_for_status()
         payload = resp.json()
 
