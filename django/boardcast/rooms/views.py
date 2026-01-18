@@ -7,14 +7,35 @@ from django.conf import settings
 from .models import Room
 from .serializers import RoomCreateSerializer, RoomJoinSerializer
 from .turn import generate_turn_credentials
+from .janus import JanusError, create_videoroom
 
 
 class RoomCreateView(APIView):
     def post(self, request):
         title = request.data.get("title", "")
         join_code = secrets.token_hex(4)
-        room = Room.objects.create(title=title, join_code=join_code)
-        return Response(RoomCreateSerializer(room).data, status=status.HTTP_201_CREATED)
+        if not settings.JANUS_URL:
+            return Response(
+                {"detail": "Janus URL not configured"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        try:
+            janus_room_id = create_videoroom(description=title or "Room")
+        except JanusError as exc:
+            return Response(
+                {"detail": "Janus room creation failed", "error": str(exc)},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
+
+        room = Room.objects.create(
+            title=title,
+            join_code=join_code,
+            janus_room_id=janus_room_id,
+        )
+        data = RoomCreateSerializer(room).data
+        data["janus_url"] = settings.JANUS_URL
+        return Response(data, status=status.HTTP_201_CREATED)
 
 
 class RoomJoinView(APIView):
@@ -33,7 +54,20 @@ class RoomJoinView(APIView):
         if room.join_code and join_code != room.join_code:
             return Response({"detail": "Invalid join code"}, status=status.HTTP_403_FORBIDDEN)
 
-        return Response({"room_id": str(room.id), "title": room.title})
+        if not room.janus_room_id:
+            return Response(
+                {"detail": "Janus room not configured"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        return Response(
+            {
+                "room_id": str(room.id),
+                "title": room.title,
+                "janus_room_id": room.janus_room_id,
+                "janus_url": settings.JANUS_URL,
+            }
+        )
 
 
 class IceConfigView(APIView):

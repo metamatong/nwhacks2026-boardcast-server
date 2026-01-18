@@ -4,5 +4,12 @@ services:
     ports:
       - "6379:6379"
 
-  # coturn + SFU are intentionally not started automatically here
-  # because their port needs vary; add later as needed.
+  janus:
+    image: meetecho/janus-gateway:latest
+    ports:
+      - "8088:8088" # HTTP Janus API
+      - "8188:8188" # WebSocket Janus API
+      - "10000-10200:10000-10200/udp" # RTP media range
+
+  # coturn is intentionally not started automatically here
+  # because its port needs vary; add later as needed.

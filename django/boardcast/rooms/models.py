@@ -9,6 +9,7 @@ class Room(models.Model):
 
     # MVP: lightweight "join token"
     join_code = models.CharField(max_length=32, blank=True, default="")
+    janus_room_id = models.BigIntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.id} {self.title}"

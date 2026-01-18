@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 1) start redis
+# 1) start infra (redis + janus)
 docker compose -f infra/docker-compose.yml up -d
 
 # 2) run migrations

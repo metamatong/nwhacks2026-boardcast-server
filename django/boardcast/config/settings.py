@@ -100,4 +100,10 @@ TURN_PORT = env("TURN_PORT", default="3478")
 TURN_REALM = env("TURN_REALM", default="localhost")
 TURN_STATIC_AUTH_SECRET = env("TURN_STATIC_AUTH_SECRET", default="change-me")
 
+# ---- Janus SFU ----
+JANUS_URL = env("JANUS_URL", default="")
+JANUS_API_SECRET = env("JANUS_API_SECRET", default="")
+JANUS_ADMIN_KEY = env("JANUS_ADMIN_KEY", default="")
+JANUS_TIMEOUT_SECONDS = env.int("JANUS_TIMEOUT_SECONDS", default=5)
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
