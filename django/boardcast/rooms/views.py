@@ -44,13 +44,18 @@ class RoomJoinView(APIView):
     def post(self, request):
         s = RoomJoinSerializer(data=request.data)
         s.is_valid(raise_exception=True)
-        room_id = s.validated_data["room_id"]
+        room_id = s.validated_data.get("room_id")
         join_code = s.validated_data.get("join_code", "")
 
         try:
-            room = Room.objects.get(id=room_id)
+            if room_id:
+                room = Room.objects.get(id=room_id)
+            else:
+                room = Room.objects.get(join_code=join_code)
         except Room.DoesNotExist:
             return Response({"detail": "Room not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Room.MultipleObjectsReturned:
+            return Response({"detail": "Room code is not unique"}, status=status.HTTP_409_CONFLICT)
 
         # MVP: optional enforcement (enforce if join_code set)
         if room.join_code and join_code != room.join_code:
