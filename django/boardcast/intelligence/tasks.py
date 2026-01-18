@@ -60,3 +60,5 @@ def process_audio_chunk_async(chunk_id: str):
             },
             "sender": None,
         })
+    else:
+        logger.info("Highlight suppressed for room %s chunk %s", chunk.room_id, chunk_id)
