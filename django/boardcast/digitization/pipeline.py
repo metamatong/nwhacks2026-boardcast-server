@@ -8,6 +8,7 @@ import numpy as np
 DEFAULT_CONFIG: Dict[str, object] = {
     "conf": 0.4,
     "person_class": 0,
+    "person_segmentation": "yolo",
     "whiteboard_thresh": 200,
     "min_whiteboard_area": 10000,
     "orb_features": 1000,
@@ -26,6 +27,11 @@ def build_config(options: Dict[str, object]) -> Dict[str, object]:
     for key, value in (options or {}).items():
         if key in config:
             config[key] = value
+
+    segmentation = str(config.get("person_segmentation") or "").lower()
+    if segmentation not in {"yolo", "heuristic"}:
+        segmentation = "yolo"
+    config["person_segmentation"] = segmentation
 
     block_size = int(config["adaptive_block_size"])
     if block_size % 2 == 0:
@@ -108,6 +114,29 @@ def detect_person_mask(
 ) -> np.ndarray:
     h, w = target_size
     person_mask = np.zeros((h, w), dtype=bool)
+
+    if config.get("person_segmentation") == "heuristic":
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        v = hsv[..., 2]
+        mask = (v < 130).astype(np.uint8) * 255
+
+        k_close = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31))
+        k_open = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
+        k_dilate = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (21, 21))
+
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, k_close, iterations=1)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, k_open, iterations=1)
+
+        num, labels, stats, _ = cv2.connectedComponentsWithStats(mask, connectivity=8)
+        cleaned = np.zeros_like(mask)
+        if num > 1:
+            areas = stats[1:, cv2.CC_STAT_AREA]
+            largest = 1 + int(np.argmax(areas))
+            if stats[largest, cv2.CC_STAT_AREA] < 0.7 * mask.size:
+                cleaned[labels == largest] = 255
+
+        cleaned = cv2.dilate(cleaned, k_dilate, iterations=1)
+        return cleaned.astype(bool)
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")

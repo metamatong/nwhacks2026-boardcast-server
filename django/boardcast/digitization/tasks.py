@@ -105,10 +105,13 @@ def process_digitization_job(job_id: str) -> None:
         person_mask_stack = np.zeros((total_frames, h, w), dtype=bool)
         bg_mask_stack = np.ones((total_frames, h, w), dtype=bool)
 
-        model_path = Path(settings.DIGITIZATION_MODEL_PATH)
-        if not model_path.exists():
-            raise ValueError(f"YOLO model not found at {model_path}")
-        model = get_yolo_model(str(model_path))
+        segmentation_mode = config.get("person_segmentation", "yolo")
+        model = None
+        if segmentation_mode == "yolo":
+            model_path = Path(settings.DIGITIZATION_MODEL_PATH)
+            if not model_path.exists():
+                raise ValueError(f"YOLO model not found at {model_path}")
+            model = get_yolo_model(str(model_path))
 
         job.stage = STAGE_ALIGNMENT
         job.save(update_fields=["stage"])
