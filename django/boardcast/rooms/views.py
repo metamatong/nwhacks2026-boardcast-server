@@ -13,7 +13,7 @@ from .janus import JanusError, create_videoroom
 class RoomCreateView(APIView):
     def post(self, request):
         title = request.data.get("title", "")
-        join_code = secrets.token_hex(4)
+        join_code = f"{secrets.randbelow(1_000_000):06d}"
         if not settings.JANUS_URL:
             return Response(
                 {"detail": "Janus URL not configured"},
