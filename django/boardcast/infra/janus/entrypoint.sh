@@ -33,4 +33,4 @@ if [ -z "$JANUS_BIN" ]; then
   fi
 fi
 
-exec "$JANUS_BIN" -c "$CONFIG_FILE"
+exec "$JANUS_BIN" -C "$CONFIG_FILE" -c "$CERT_FILE" -k "$KEY_FILE"
