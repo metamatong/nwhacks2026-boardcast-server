@@ -44,7 +44,7 @@ primary_region = 'lax'
   processes = ['app']
 
   [[services.ports]]
-    port = 10000
+    start_port = 10000
     end_port = 10200
 
 [[vm]]
