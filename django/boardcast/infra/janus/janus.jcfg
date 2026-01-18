@@ -6,6 +6,9 @@ general: {
   log_to_stdout = true;
   log_timestamps = true;
   log_level = 4;
+};
+
+certificates: {
   cert_pem = "/janus/certs/janus.crt";
   cert_key = "/janus/certs/janus.key";
 };
