@@ -1,4 +1,5 @@
 import secrets
+import string
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,7 +14,8 @@ from .janus import JanusError, create_videoroom
 class RoomCreateView(APIView):
     def post(self, request):
         title = request.data.get("title", "")
-        join_code = f"{secrets.randbelow(1_000_000):06d}"
+        alphabet = string.ascii_uppercase + string.digits
+        join_code = "".join(secrets.choice(alphabet) for _ in range(6))
         if not settings.JANUS_URL:
             return Response(
                 {"detail": "Janus URL not configured"},
