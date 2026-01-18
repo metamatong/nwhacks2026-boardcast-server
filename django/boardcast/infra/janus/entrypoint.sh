@@ -33,4 +33,4 @@ if [ -z "$JANUS_BIN" ]; then
   fi
 fi
 
-exec "$JANUS_BIN"
+exec "$JANUS_BIN" -c "$CONFIG_FILE"
