@@ -12,6 +12,8 @@ fly deploy --config infra/janus/fly.toml
 
 This build compiles Janus from source to avoid Docker registry auth issues.
 
+DTLS certificates are generated automatically on startup if none are present.
+
 ### Set public IP (recommended)
 If you allocated a dedicated IPv4, set it so Janus advertises the correct host
 in ICE candidates:

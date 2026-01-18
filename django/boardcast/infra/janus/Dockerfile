@@ -12,6 +12,7 @@ RUN apt-get update \
         libtool \
         build-essential \
         pkg-config \
+        openssl \
         libmicrohttpd-dev \
         libjansson-dev \
         libnice-dev \

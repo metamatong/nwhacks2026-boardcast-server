@@ -15,3 +15,6 @@ media: {
 nat: {
   nat_1_1_mapping = "__JANUS_PUBLIC_IP__"
 }
+
+cert_pem = "/janus/certs/janus.crt"
+cert_key = "/janus/certs/janus.key"
