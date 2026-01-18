@@ -7,6 +7,9 @@ RUN apt-get update \
         ca-certificates \
         curl \
         git \
+        autoconf \
+        automake \
+        libtool \
         build-essential \
         pkg-config \
         libmicrohttpd-dev \
