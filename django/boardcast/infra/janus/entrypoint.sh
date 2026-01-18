@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -e
 
-CONFIG_FILE="/janus/janus.jcfg"
+CONFIG_FILE="/opt/janus/etc/janus/janus.jcfg"
 CERT_DIR="/janus/certs"
 CERT_FILE="${CERT_DIR}/janus.crt"
 KEY_FILE="${CERT_DIR}/janus.key"
@@ -33,4 +33,4 @@ if [ -z "$JANUS_BIN" ]; then
   fi
 fi
 
-exec "$JANUS_BIN" -c "$CONFIG_FILE"
+exec "$JANUS_BIN"

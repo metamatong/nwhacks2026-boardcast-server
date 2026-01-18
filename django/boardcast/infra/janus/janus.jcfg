@@ -18,5 +18,7 @@ media: {
 };
 
 nat: {
+  stun_server = "stun.l.google.com";
+  stun_port = 19302;
   nat_1_1_mapping = "__JANUS_PUBLIC_IP__";
 };
