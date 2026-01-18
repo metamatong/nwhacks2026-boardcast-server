@@ -26,6 +26,7 @@ RUN apt-get update \
         libavutil-dev \
         libavcodec-dev \
         libavformat-dev \
+        libsrtp2-dev \
         gengetopt \
     && rm -rf /var/lib/apt/lists/*
 
