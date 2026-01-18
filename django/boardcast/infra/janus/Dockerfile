@@ -36,8 +36,8 @@ RUN sh autogen.sh \
     && make configs
 
 RUN mkdir -p /janus
-COPY janus.jcfg /janus/janus.jcfg
-COPY entrypoint.sh /entrypoint.sh
+COPY infra/janus/janus.jcfg /janus/janus.jcfg
+COPY infra/janus/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 8088 8188 10000-10200/udp
