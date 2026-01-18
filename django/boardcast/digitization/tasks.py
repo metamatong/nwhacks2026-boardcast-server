@@ -1,9 +1,7 @@
 import logging
 from pathlib import Path
-from typing import List
+from typing import Any, List
 
-import cv2
-import numpy as np
 from celery import shared_task
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -25,23 +23,13 @@ from .constants import (
     STAGE_WHITEBOARD_DETECTION,
 )
 from .models import DigitizationFrame, DigitizationJob
-from .pipeline import (
-    align_image,
-    build_config,
-    detect_ink_mask,
-    detect_person_mask,
-    detect_whiteboard_bbox,
-    encode_image,
-    estimate_background,
-    estimate_stroke_colors,
-    get_yolo_model,
-    render_canvas,
-)
-
 logger = logging.getLogger(__name__)
 
 
-def _load_frames(frames: List[DigitizationFrame]) -> List[np.ndarray]:
+def _load_frames(frames: List[DigitizationFrame]) -> List[Any]:
+    import cv2
+    import numpy as np
+
     images = []
     for frame in frames:
         with frame.image.open("rb") as fh:
@@ -74,6 +62,22 @@ def process_digitization_job(job_id: str) -> None:
     job.save()
 
     try:
+        import numpy as np
+        import cv2
+
+        from .pipeline import (
+            align_image,
+            build_config,
+            detect_ink_mask,
+            detect_person_mask,
+            detect_whiteboard_bbox,
+            encode_image,
+            estimate_background,
+            estimate_stroke_colors,
+            get_yolo_model,
+            render_canvas,
+        )
+
         frames_qs = list(DigitizationFrame.objects.filter(job=job).order_by("frame_index"))
         if not frames_qs:
             raise ValueError("No frames uploaded")

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from celery import current_app
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,7 +17,6 @@ from .constants import (
 )
 from .models import DigitizationFrame, DigitizationJob
 from .serializers import DigitizationFrameUploadSerializer, DigitizationJobCreateSerializer
-from .tasks import process_digitization_job
 
 
 def _file_url(request, file_field):
@@ -120,7 +120,10 @@ class DigitizationFrameUploadView(APIView):
                 job.status = STATUS_QUEUED
                 job.stage = STAGE_LOADING
                 job.save(update_fields=["status", "stage"])
-                process_digitization_job.delay(str(job.id))
+                current_app.send_task(
+                    "digitization.tasks.process_digitization_job",
+                    args=[str(job.id)],
+                )
 
         return Response(
             {
@@ -155,7 +158,10 @@ class DigitizationJobRunView(APIView):
         job.stage = STAGE_LOADING
         job.save(update_fields=["status", "stage"])
 
-        process_digitization_job.delay(str(job.id))
+        current_app.send_task(
+            "digitization.tasks.process_digitization_job",
+            args=[str(job.id)],
+        )
 
         return Response({"job_id": str(job.id), "status": job.status}, status=status.HTTP_200_OK)
 

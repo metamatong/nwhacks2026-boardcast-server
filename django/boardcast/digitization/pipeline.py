@@ -1,10 +1,9 @@
 import warnings
 from functools import lru_cache
-from typing import Dict, Tuple
+from typing import Any, Dict, Tuple
 
 import cv2
 import numpy as np
-from ultralytics import YOLO
 
 DEFAULT_CONFIG: Dict[str, object] = {
     "conf": 0.4,
@@ -37,7 +36,9 @@ def build_config(options: Dict[str, object]) -> Dict[str, object]:
 
 
 @lru_cache(maxsize=1)
-def get_yolo_model(model_path: str) -> YOLO:
+def get_yolo_model(model_path: str) -> Any:
+    from ultralytics import YOLO
+
     return YOLO(model_path)
 
 
@@ -101,7 +102,7 @@ def align_image(
 
 def detect_person_mask(
     img: np.ndarray,
-    model: YOLO,
+    model: Any,
     target_size: Tuple[int, int],
     config: Dict[str, object],
 ) -> np.ndarray:
