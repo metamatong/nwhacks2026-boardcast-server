@@ -6,6 +6,10 @@ channels-redis==4.2.0
 django-cors-headers==4.4.0
 daphne==4.1.2
 
+# S3 media storage
+django-storages==1.14.4
+boto3==1.35.32
+
 # Worker (optional but recommended)
 celery==5.4.0
 redis==5.0.8
@@ -15,3 +19,6 @@ psycopg[binary]==3.2.3
 
 # For uploads / validation
 python-magic==0.4.27; platform_system != "Windows"
+
+# External API calls
+requests==2.32.3
