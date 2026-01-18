@@ -102,7 +102,11 @@ def detect_highlight(transcript: str, context: str) -> Optional[Dict[str, str]]:
     url = f"{settings.GEMINI_BASE_URL}/models/{settings.GEMINI_MODEL}:generateContent"
     payload = {
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.2, "maxOutputTokens": 256},
+        "generationConfig": {
+            "temperature": 0.2,
+            "maxOutputTokens": 256,
+            "responseMimeType": "application/json",
+        },
     }
 
     try:
@@ -161,7 +165,8 @@ def _build_prompt(transcript: str, context: str) -> str:
     return (
         "You are a teaching assistant. Identify whether the latest transcript includes an "
         "important student-facing trigger (quiz, exam, assignment, deadline, important note). "
-        "Return JSON only with keys: important (bool), title (string), detail (string), confidence (0-1).\n\n"
+        "Return JSON only with keys: important (bool), title (string), detail (string), confidence (0-1). "
+        "Do not add markdown, code fences, or extra text.\n\n"
         f"{context_block}"
         f"Latest transcript:\n{transcript}\n"
     )
