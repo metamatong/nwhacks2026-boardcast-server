@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "realtime",
     "media_ingest",
     "intelligence",
+    "digitization",
 ]
 
 MIDDLEWARE = [
@@ -156,3 +157,16 @@ GEMINI_MIN_CONFIDENCE = env.float("GEMINI_MIN_CONFIDENCE", default=0.55)
 TRANSCRIPT_CONTEXT_MAX_CHUNKS = env.int("TRANSCRIPT_CONTEXT_MAX_CHUNKS", default=20)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# ---- Digitization ----
+DIGITIZATION_DEFAULT_EXPECTED_FRAMES = env.int("DIGITIZATION_DEFAULT_EXPECTED_FRAMES", default=9)
+DIGITIZATION_MAX_FRAME_BYTES = env.int("DIGITIZATION_MAX_FRAME_BYTES", default=3_000_000)
+DIGITIZATION_ALLOWED_MIME_TYPES = env.list(
+    "DIGITIZATION_ALLOWED_MIME_TYPES",
+    default=["image/jpeg", "image/png", "image/webp"],
+)
+DIGITIZATION_MODEL_PATH = env(
+    "DIGITIZATION_MODEL_PATH",
+    default=str(BASE_DIR / "legacy" / "yolov8n-seg.pt"),
+)
+DIGITIZATION_AUTO_TRIGGER = env.bool("DIGITIZATION_AUTO_TRIGGER", default=False)

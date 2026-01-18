@@ -31,6 +31,8 @@ Incremental==24.11.0
 jmespath==1.0.1
 kombu==5.6.2
 msgpack==1.1.2
+numpy==1.26.4
+opencv-python-headless==4.10.0.84
 packaging==25.0
 prompt_toolkit==3.0.52
 psycopg==3.2.3
@@ -48,11 +50,13 @@ s3transfer==0.10.4
 service-identity==24.2.0
 six==1.17.0
 sqlparse==0.5.5
+torch==2.3.1
 Twisted==25.5.0
 txaio==25.12.2
 typing_extensions==4.15.0
 tzdata==2025.3
 ujson==5.11.0
+ultralytics==8.2.45
 urllib3==2.6.3
 vine==5.1.0
 wcwidth==0.2.14

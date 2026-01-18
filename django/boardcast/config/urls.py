@@ -8,4 +8,5 @@ urlpatterns = [
     path("api/rooms/", include("rooms.urls")),
     path("api/media/", include("media_ingest.urls")),
     path("api/realtime/", include("realtime.urls")),
+    path("api/", include("digitization.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
