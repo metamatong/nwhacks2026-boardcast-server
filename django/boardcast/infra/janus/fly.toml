@@ -16,6 +16,9 @@ primary_region = 'lax'
   protocol = 'tcp'
   internal_port = 8088
   processes = ['app']
+  auto_start_machines = true
+  auto_stop_machines = false
+  min_machines_running = 1
 
   [[services.ports]]
     port = 80
@@ -29,6 +32,9 @@ primary_region = 'lax'
   protocol = 'tcp'
   internal_port = 8188
   processes = ['app']
+  auto_start_machines = true
+  auto_stop_machines = false
+  min_machines_running = 1
 
   [[services.ports]]
     port = 8188
