@@ -1,16 +1,21 @@
 #!/usr/bin/env sh
 set -e
 
-CONFIG_FILE="/opt/janus/etc/janus/janus.jcfg"
+CONFIG_FILE="/janus/janus.jcfg"
+ALT_CONFIG_FILE="/opt/janus/etc/janus/janus.jcfg"
 CERT_DIR="/janus/certs"
 CERT_FILE="${CERT_DIR}/janus.crt"
 KEY_FILE="${CERT_DIR}/janus.key"
 
-if [ -n "${JANUS_PUBLIC_IP:-}" ]; then
-  sed -i "s/__JANUS_PUBLIC_IP__/${JANUS_PUBLIC_IP}/g" "$CONFIG_FILE"
-else
-  sed -i '/nat_1_1_mapping/d' "$CONFIG_FILE"
-fi
+for CFG in "$CONFIG_FILE" "$ALT_CONFIG_FILE"; do
+  if [ -f "$CFG" ]; then
+    if [ -n "${JANUS_PUBLIC_IP:-}" ]; then
+      sed -i "s/__JANUS_PUBLIC_IP__/${JANUS_PUBLIC_IP}/g" "$CFG"
+    else
+      sed -i '/nat_1_1_mapping/d' "$CFG"
+    fi
+  fi
+done
 
 if [ ! -f "$CERT_FILE" ] || [ ! -f "$KEY_FILE" ]; then
   mkdir -p "$CERT_DIR"

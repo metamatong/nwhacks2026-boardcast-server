@@ -41,6 +41,7 @@ RUN sh autogen.sh \
     && make configs
 
 RUN mkdir -p /janus
+COPY janus.jcfg /janus/janus.jcfg
 COPY janus.jcfg /opt/janus/etc/janus/janus.jcfg
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
