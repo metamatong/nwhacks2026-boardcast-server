@@ -1,1 +1,11 @@
 /django/boardcast/.env
+/.idea/.gitignore
+/django/boardcast/docs/api.md
+/django/boardcast/docs/client-janus.md
+/CLIENT_INTEGRATION.md
+/django/boardcast/db.sqlite3
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/nwhacks2026-boardcast-server.iml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/vcs.xml
